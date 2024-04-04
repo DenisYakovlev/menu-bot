@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from alembic import context
-from db import Base
+from db.session import Base
 from core.config import settings
 from models import *
 
