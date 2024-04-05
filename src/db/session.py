@@ -1,12 +1,12 @@
 from contextlib import asynccontextmanager
-from typing import TYPE_CHECKING, AsyncIterator
+from typing import AsyncIterator
 
 from sqlalchemy.ext.asyncio import (AsyncConnection, AsyncEngine, AsyncSession,
                                     async_sessionmaker, create_async_engine)
 from sqlalchemy.orm import declarative_base
 
-if TYPE_CHECKING:
-    from core.exceptions import DBSessionInitError
+from core.exceptions import DBSessionInitError
+from core.config import settings
 
 
 class DatabaseSessionManager:
@@ -58,8 +58,4 @@ Base = declarative_base()
 
 # define sessions of app
 sessionmanager = DatabaseSessionManager()
-
-
-async def get_db():
-    async with sessionmanager.session() as session:
-        yield session
+sessionmanager.init(host=settings.DB.DB_URL)

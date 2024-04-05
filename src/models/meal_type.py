@@ -10,4 +10,4 @@ class MealType(Base):
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(64), unique=True, nullable=False)
 
-    refered_meals = relationship("Meal", back_populates="meal_type")
+    refered_meals = relationship("Meal", back_populates="meal_type", lazy="selectin")

@@ -1,1 +1,1 @@
-from .loader import redis_client, dp, bot
+from .loader import redis_client, dp, bot, logger

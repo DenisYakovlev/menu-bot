@@ -16,5 +16,5 @@ class Meal(Base):
 
     meal_type = relationship("MealType", back_populates="refered_meals")
 
-    menus = relationship("Menu", secondary=meal_menu_relation, back_populates="meals", passive_deletes=True)
+    menus = relationship("Menu", secondary=meal_menu_relation, back_populates="meals", passive_deletes=True, lazy="selectin")
 

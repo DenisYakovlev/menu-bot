@@ -12,4 +12,4 @@ class Menu(Base):
     name = sa.Column(sa.String(64), nullable=False, unique=False)
     date = sa.Column(sa.Date, nullable=False)
 
-    meals = relationship("Meal", secondary=meal_menu_relation, back_populates="menus", passive_deletes=True)
+    meals = relationship("Meal", secondary=meal_menu_relation, back_populates="menus", passive_deletes=True, lazy="selectin")
