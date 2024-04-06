@@ -7,8 +7,8 @@ def menu_keyboard(is_manager: bool) -> ReplyKeyboardMarkup:
     """
 
     user_buttons = [
-        [KeyboardButton(text="🕒 Меню на сьогодні")],
-        [KeyboardButton(text="🕥 Меню на завтра")],
+        [KeyboardButton(text="🕒 Обрати меню на сьогодні")],
+        [KeyboardButton(text="🕥 Обрати меню на завтра")],
         [KeyboardButton(text="⏮ Головне меню")]
     ]
 

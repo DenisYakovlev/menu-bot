@@ -18,3 +18,6 @@ class UserUpdateError(Exception):
 
 class InvalidDateError(Exception):
     base_message = "Provided date is not valid"
+
+class InvalidCacheKey(Exception):
+    base_message = "Provided key is not valid"
