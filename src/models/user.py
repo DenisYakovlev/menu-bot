@@ -1,5 +1,6 @@
 import sqlalchemy as sa
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 
 from db import Base
 
@@ -16,3 +17,6 @@ class User(Base):
     is_active = sa.Column(sa.Boolean, nullable=False, default=True)
     is_manager = sa.Column(sa.Boolean, nullable=False, default=False)
     created_at = sa.Column(sa.DateTime, nullable=False, default=func.now())
+
+    orders = relationship("Order", back_populates="user")
+    
