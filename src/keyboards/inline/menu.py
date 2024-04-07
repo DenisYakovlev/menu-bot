@@ -71,14 +71,14 @@ async def check_keyboard(session: AsyncSession, menu_id: int, state_data: Dict) 
     buttons = []
     for meal in meals:
         buttons.append([
-            InlineKeyboardButton(text=f"{meal.name} - {meal.price} грн", callback_data=f"{keyword}data_{meal.id}_{menu_id}"),
+            InlineKeyboardButton(text=f"{meal.name} - {meal.price} грн", callback_data=f"{keyword}data__{menu_id}"),
             InlineKeyboardButton(text="❌ Видалити", callback_data=f"{keyword}remove_{meal.id}_{menu_id}")
         ])
 
     buttons.append([
-        InlineKeyboardButton(text="⏪ Назад", callback_data=f"{keyword}back_{meal.id}_{menu_id}"),
+        InlineKeyboardButton(text="⏪ Назад", callback_data=f"{keyword}back_{menu_id}"),
         InlineKeyboardButton(text="❌ Скасувати", callback_data=f"{callbackKeywords.choose_menu}cancel"),
-        InlineKeyboardButton(text="✅ Підтвердити", callback_data=f"{keyword}confirm_{meal.id}_{menu_id}")
+        InlineKeyboardButton(text="✅ Підтвердити", callback_data=f"{keyword}confirm_{menu_id}")
     ])
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)

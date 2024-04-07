@@ -1,5 +1,5 @@
 import os
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from dotenv import load_dotenv
 from pydantic import BaseModel, computed_field
@@ -31,6 +31,8 @@ class Settings(BaseSettings):
 
     BOT_TOKEN: str = os.getenv("BOT_TOKEN")
 
+    PAYMENT_TOKEN: str = os.getenv("PAYMENT_TOKEN")
+
     DATABASES: Dict[str, DBConfig] = {
         "default": DBConfig(
             DB_USER=os.getenv("DB_USER"),
@@ -47,7 +49,7 @@ class Settings(BaseSettings):
         )
     }
 
-    LOGGING_CONFIG: Dict = {
+    LOGGING_CONFIG: Dict[str, Any] = {
         'version': 1,
         'disable_existing_loggers': False,
         'handlers': {

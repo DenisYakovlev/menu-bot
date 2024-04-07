@@ -17,12 +17,12 @@ async def start_handler(message: types.Message, session: AsyncSession, user: Use
     if user:
         return await message.answer(
             messageBuilder.start_welcome_back(user.first_name), 
-            reply_markup=home_keyboard()
+            reply_markup=home_keyboard(user.is_manager)
         )
     
     new_user = await register_user(message.from_user, session)
 
     await message.answer(
         messageBuilder.start_welcome(new_user.first_name), 
-        reply_markup=home_keyboard()
+        reply_markup=home_keyboard(new_user.is_manager)
     )

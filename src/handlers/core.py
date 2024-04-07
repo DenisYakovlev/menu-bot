@@ -2,6 +2,7 @@ from aiogram import F, Router
 from aiogram.types import Message, ErrorEvent
 
 from filters.auth import AuthorizedOnly
+from models import User
 from services.messages import messageBuilder
 from keyboards.reply.home import home_keyboard
 from core.loader import logger
@@ -10,14 +11,14 @@ router = Router(name="core")
 
 
 @router.message(F.text == "⏮ Головне меню", AuthorizedOnly())
-async def main_menu(message: Message) -> None:
+async def main_menu(message: Message, user: User) -> None:
     """
         back to home menu
     """
 
     await message.answer(
         messageBuilder.main_menu(),
-        reply_markup=home_keyboard()
+        reply_markup=home_keyboard(user.is_manager)
     )
 
 @router.error(F.update.message.as_("message"))

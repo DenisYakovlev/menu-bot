@@ -11,7 +11,7 @@ __all__ = [
     "Menu",
     "Meal",
     "MealType",
-    "Order"
+    "Order",
     "meal_menu_relation",
     "order_meal_relation"
 ]

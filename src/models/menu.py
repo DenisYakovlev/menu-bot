@@ -13,3 +13,4 @@ class Menu(Base):
     date = sa.Column(sa.Date, nullable=False)
 
     meals = relationship("Meal", secondary=meal_menu_relation, back_populates="menus", passive_deletes=True, lazy="selectin")
+    orders = relationship("Order", back_populates="menu")
