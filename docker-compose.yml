@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  bot:
+    build: 
+      dockerfile: Dockerfile
+      context: ./
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "alembic upgrade head &&
+      python ./src/main.py"
+    env_file:
+      - .env.prod
+    depends_on:
+      bot_redis:
+        condition: service_healthy
+      bot_db:
+        condition: service_healthy
+
+  bot_redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+  bot_db:
+    image: "postgres:latest"
+    env_file:
+      - .env.db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
