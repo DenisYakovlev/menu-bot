@@ -9,6 +9,7 @@ from core import redis_client, logger
 from core.exceptions import DBSessionMiddlewareError
 from models.user import User
 from services.user import fetch_user
+from cache.redis import clear_cache
 
 
 class AuthMiddleware(BaseMiddleware):
@@ -34,6 +35,10 @@ class AuthMiddleware(BaseMiddleware):
 
         if db_user is None:
             data["user"] = None
+
+            # omit cache, because it's None
+            await clear_cache(fetch_user, tg_user.id)
+            
             return await handler(event, data)
 
         # merge user to current db session
