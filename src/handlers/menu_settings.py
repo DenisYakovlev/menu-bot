@@ -28,9 +28,3 @@ async def cancel(message: Message, state: FSMContext) -> None:
         await state.clear()
 
     await menu_settings(message)
-
-
-@router.message(F.text == "🖊 Редагувати страву", ManagerOnly())
-async def meal_update(message: Message, user: User, session: AsyncSession) -> None:
-    await message.answer("mock")
-

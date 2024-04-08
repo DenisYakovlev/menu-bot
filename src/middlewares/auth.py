@@ -32,5 +32,12 @@ class AuthMiddleware(BaseMiddleware):
         tg_user: types.User = message.from_user
         db_user: Optional[User] = await fetch_user(tg_user.id, session)
 
+        if db_user is None:
+            data["user"] = None
+            return await handler(event, data)
+
+        # merge user to current db session
+        db_user = await session.merge(db_user)
+
         data["user"] = db_user
         return await handler(event, data)

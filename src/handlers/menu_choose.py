@@ -20,6 +20,9 @@ from services.order import create_order, insert_order_meal_relations
 router = Router(name="menu_choose")
 
 
+order_img_src = "https://www.barony-biggar.co.uk/wp-content/uploads/2015/12/MENU.png"
+
+
 class OrderForm(StatesGroup):
     user_id = State()
     choosen_meals = State()
@@ -47,7 +50,7 @@ async def process_order_create(menu: Menu, message: Message, session: AsyncSessi
 
     # TODO: change photo to some nice menu photo
     await message.answer_photo(
-        photo=default_img_src,
+        photo=order_img_src,
         caption=messageBuilder.choose_menu(menu.name),
         reply_markup=await menu_keyboard(session, menu.id, data)
     )
@@ -80,7 +83,7 @@ async def choose_for_today(message: Message, session: AsyncSession, state: FSMCo
 @router.callback_query(F.data.startswith(callbackKeywords.choose_menu + "next"))
 async def process_next(callback_query: CallbackQuery, state: FSMContext, session: AsyncSession) -> None:
     callback_data = callback_query.data[len(callbackKeywords.choose_menu + "next_"):]
-    meal_id, menu_id = map(int, callback_data.split('_'))
+    menu_id = int(callback_data)
     data = await state.get_data()
 
     current_type_id = data["current_type_id"] + 1
@@ -99,7 +102,7 @@ async def process_next(callback_query: CallbackQuery, state: FSMContext, session
 @router.callback_query(F.data.startswith(callbackKeywords.choose_menu + "previous"))
 async def process_previous(callback_query: CallbackQuery, state: FSMContext, session: AsyncSession) -> None:
     callback_data = callback_query.data[len(callbackKeywords.choose_menu + "previous_"):]
-    meal_id, menu_id = map(int, callback_data.split('_'))
+    menu_id = int(callback_data)
     data = await state.get_data()
 
     current_type_id = data["current_type_id"] - 1
@@ -191,13 +194,13 @@ async def process_data(callback_query: CallbackQuery, state: FSMContext, session
 @router.callback_query(F.data.startswith(callbackKeywords.choose_menu + "check"))
 async def process_check(callback_query: CallbackQuery, state: FSMContext, session: AsyncSession) -> None:
     callback_data = callback_query.data[len(callbackKeywords.choose_menu + "check_"):]
-    meal_id, menu_id = map(int, callback_data.split('_'))
+    menu_id = int(callback_data)
 
     data = await state.get_data()
 
     await bot.edit_message_media(
         media=InputMediaPhoto(
-            media=default_img_src,
+            media=order_img_src,
             caption=messageBuilder.choose_menu_check(data["total_price"])
         ),
         chat_id=callback_query.from_user.id,
@@ -214,7 +217,7 @@ async def process_check_back(callback_query: CallbackQuery, state: FSMContext, s
 
     await bot.edit_message_media(
         media=InputMediaPhoto(
-            media=default_img_src,
+            media=order_img_src,
             caption=messageBuilder.choose_menu(data["menu_name"])
         ),
         chat_id=callback_query.from_user.id,

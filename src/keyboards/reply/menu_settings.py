@@ -8,7 +8,7 @@ def menu_settings_keyboard() -> ReplyKeyboardMarkup:
 
     buttons = [
         [KeyboardButton(text="🛠 Створити меню"), KeyboardButton(text="🖊 Редагувати меню")],
-        [KeyboardButton(text="🛠 Створити страву"), KeyboardButton(text="🖊 Редагувати страву")],
+        [KeyboardButton(text="🛠 Створити страву")],
         [KeyboardButton(text="⏮ Головне меню")]
     ]
 

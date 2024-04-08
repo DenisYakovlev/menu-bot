@@ -1,14 +1,16 @@
+from typing import List
 from aiogram import types
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models import User
 from core.exceptions import UserUpdateError
+from cache.redis import build_key, cached, clear_cache
 
 
 async def register_user(user: types.User, session: AsyncSession) -> User:
     """
-        Register user from start command
+    Register user from start command
     """
     new_user = User(
         id=user.id,
@@ -22,12 +24,14 @@ async def register_user(user: types.User, session: AsyncSession) -> User:
     await session.commit()
     await session.refresh(new_user)
 
+    await clear_cache(user_exists, new_user.id)
+
     return new_user
 
-
+@cached(key_builder=lambda user_id, session: build_key(user_id))
 async def user_exists(user_id: int, session: AsyncSession) -> bool:
     """
-        Check if user exists in db
+    Check if user exists in db
     """
     query = select(User.id).filter_by(id=user_id).limit(1)
 
@@ -36,10 +40,10 @@ async def user_exists(user_id: int, session: AsyncSession) -> bool:
 
     return bool(user)
 
-
+@cached(key_builder=lambda user_id, session: build_key(user_id))
 async def fetch_user(user_id: int, session: AsyncSession) -> User:
     """
-        Fetch user from db
+    Fetch user from db
     """
     query = select(User).filter_by(id=user_id).limit(1)
 
@@ -48,9 +52,10 @@ async def fetch_user(user_id: int, session: AsyncSession) -> User:
 
     return user
 
+
 async def update_user_from_contact(user: User, contact: types.Contact, session: AsyncSession) -> User:
     """
-        Update user from provided contact
+    Update user from provided contact
     """
     if not User:
         raise UserUpdateError()
@@ -62,12 +67,14 @@ async def update_user_from_contact(user: User, contact: types.Contact, session: 
     await session.commit()
     await session.refresh(user)
 
+    await clear_cache(fetch_user, user.id)
+
     return user
 
 
 async def change_user_status(user: User, session: AsyncSession) -> User:
     """
-        Change is_manager value
+    Change is_manager value
     """
     if not User:
         raise UserUpdateError()
@@ -76,5 +83,7 @@ async def change_user_status(user: User, session: AsyncSession) -> User:
 
     await session.commit()
     await session.refresh(user)
+
+    await clear_cache(fetch_user, user.id)
 
     return user

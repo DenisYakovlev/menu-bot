@@ -8,6 +8,7 @@ from core import logger
 from services.meal import list_menu_meal_by_type, get_meal_from_ids
 
 
+
 class CallbackKeywords(BaseModel):
     choose_menu: str = "1_ch_menu_"
     check: str = "2_ch_check_"
@@ -42,19 +43,19 @@ async def menu_keyboard(session: AsyncSession, menu_id: int, state_data: Dict) -
 
     # pagination button
     buttons.append([
-        InlineKeyboardButton(text="⏪", callback_data=f"{keyword}previous_{meal.id}_{menu_id}") \
+        InlineKeyboardButton(text="⏪", callback_data=f"{keyword}previous_{menu_id}") \
             if state_data["has_previous_type"] else block_button,
 
-        InlineKeyboardButton(text=f"{current_type['name']}", callback_data=f"{keyword}current_{meal.id}_{menu_id}"),
+        InlineKeyboardButton(text=f"{current_type['name']}", callback_data=f"{keyword}current_{menu_id}"),
 
-        InlineKeyboardButton(text="⏩", callback_data=f"{keyword}next_{meal.id}_{menu_id}") \
+        InlineKeyboardButton(text="⏩", callback_data=f"{keyword}next_{menu_id}") \
             if state_data["has_next_type"] else block_button
     ])
 
     # global control buttons
     buttons.append([
         InlineKeyboardButton(text="❌ Скасувати", callback_data=f"{keyword}cancel"),
-        InlineKeyboardButton(text="📝 Чек", callback_data=f"{keyword}check_{meal.id}_{menu_id}")
+        InlineKeyboardButton(text="📝 Чек", callback_data=f"{keyword}check_{menu_id}")
     ])
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)

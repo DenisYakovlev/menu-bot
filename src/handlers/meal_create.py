@@ -1,5 +1,5 @@
 from aiogram import F, Router
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
@@ -10,7 +10,7 @@ from keyboards.inline.menu_settings import meal_type_keyboard, callbackKeywords
 from keyboards.reply.menu_settings import entity_create_keyboard, menu_settings_keyboard
 from models.meal import Meal
 from services.meal import create_meal
-from core.loader import bot
+from core.loader import bot, logger, settings
 
 
 router = Router(name="meal_create")
@@ -30,6 +30,9 @@ async def meal_create(message: Message, state: FSMContext) -> None:
 
 @router.message(MealForm.name, F.text, ManagerOnly())
 async def process_meal_name(message: Message, state: FSMContext) -> None:
+    """
+    Name processing
+    """
     await state.update_data(name=message.text)
     await state.set_state(MealForm.price)
 
@@ -41,6 +44,9 @@ async def process_meal_invalid_price(message: Message, state: FSMContext) -> Non
 
 @router.message(MealForm.price, F.text.func(lambda x: int(x) > 0), ManagerOnly())
 async def process_meal_price(message: Message, state: FSMContext) -> None:
+    """
+    Price processing
+    """
     await state.update_data(price=message.text)
     await state.set_state(MealForm.img_url)
 
@@ -49,6 +55,9 @@ async def process_meal_price(message: Message, state: FSMContext) -> None:
 
 @router.message(MealForm.img_url, F.text =="-", ManagerOnly())
 async def process_meal_img_url_default(message: Message, state: FSMContext, session: AsyncSession) -> None:
+    """
+    Img url processing
+    """
     await state.update_data(img_url="default")
     await state.set_state(MealForm.type_id)
 
@@ -64,6 +73,7 @@ async def process_meal_img_url_default(message: Message, state: FSMContext, sess
 )
 async def process_meal_invalid_img_url(message: Message) -> None:
     await message.answer(messageBuilder.meal_create_img_url_error())
+
 
 @router.message(
     MealForm.img_url, 
@@ -82,6 +92,9 @@ async def process_meal_img_url(message: Message, state: FSMContext, session: Asy
 
 @router.callback_query(F.data.startswith(callbackKeywords.meal_type))
 async def process_meal_type(callback_query: CallbackQuery, state: FSMContext, session: AsyncSession) -> None:
+    """
+    Type processing
+    """
     meal_type_id = callback_query.data[len(callbackKeywords.meal_type):]
     data = await state.update_data(type_id=meal_type_id)
     await state.clear()

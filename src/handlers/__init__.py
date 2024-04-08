@@ -9,6 +9,7 @@ from . import (
     menu_settings,
     menu_create,
     meal_create,
+    meal_edit,
     menu_edit,
     menu_choose,
     orders,
@@ -26,6 +27,7 @@ def get_handlers_router() -> Router:
     router.include_router(menu_settings.router)
     router.include_router(menu_create.router)
     router.include_router(meal_create.router)
+    router.include_router(meal_edit.router)
     router.include_router(menu_edit.router)
     router.include_router(menu_choose.router)
     router.include_router(orders.router)

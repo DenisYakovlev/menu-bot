@@ -1,5 +1,6 @@
 from aiogram import F, Router
 from aiogram.types import Message, ErrorEvent
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from filters.auth import AuthorizedOnly
 from models import User
@@ -13,7 +14,7 @@ router = Router(name="core")
 @router.message(F.text == "⏮ Головне меню", AuthorizedOnly())
 async def main_menu(message: Message, user: User) -> None:
     """
-        back to home menu
+    Back to home menu
     """
 
     await message.answer(

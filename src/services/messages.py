@@ -3,6 +3,9 @@ from typing import List
 
 
 class MessageBuilder():
+    """
+    Used to build message answers
+    """
 
     def start_welcome(self, first_name: str) -> str:
         return _(
@@ -93,7 +96,10 @@ class MessageBuilder():
             f"""
             *⚙️ Налаштування меню*
 
-            TODO: text to menu settings
+            Доступні дії:
+            • Створення меню
+            • Редагування меню
+            • Створення страв
             """
         )
     
@@ -323,5 +329,24 @@ class MessageBuilder():
             CV: Будь-яке значення, наприклад 123
             """
         )
+    
+    def meal_edit(self) -> str:
+        return _(
+            f"""
+            *🍽 Список страв*
+
+            Оберіть страву, яке хочете редактувати
+            """
+        )
+    
+    def meal_info(self) -> str:
+        return _(
+            f"""
+            *🍽 Редагування страви*
+
+            Оберіть що хочете змінити із списку значень
+            """
+        )
+
     
 messageBuilder = MessageBuilder()
